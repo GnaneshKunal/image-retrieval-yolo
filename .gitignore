@@ -1,0 +1,8 @@
+node_modules/
+dist/
+src/**/*.js
+index.js
+*.log
+.vscode/
+.env
+.out
