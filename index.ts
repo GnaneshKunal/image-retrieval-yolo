@@ -4,9 +4,48 @@ import * as http from 'http';
 import * as dotenv from 'dotenv';
 import * as morgan from 'morgan';
 import * as multer from 'multer';
+import * as fs from 'fs';
+import * as process from 'process';
+import { remove, map, uniq } from 'lodash';
+import * as mongoose from 'mongoose';
+import { spawn } from 'child_process';
 
+import { YoloModelSchema, IYoloSchema } from './models/yolo';
+
+const upload = multer({ dest: 'uploads/' })
 
 dotenv.config();
+
+const DATABASE_URL: string = 'mongodb://localhost:27017/yolo';
+
+(<any>mongoose).Promise = global.Promise;
+
+mongoose.connect(DATABASE_URL, (err: mongoose.Error) => {
+    if (err)
+        throw err;
+    else
+        console.log('connected');
+});
+
+function classifyImage(img: any, res: express.Response) {
+    process.chdir('/home/monster/git/darknet');
+    let t = spawn('./darknet', ["detect", "cfg/yolo.cfg", "yolo.weights", img])
+    var cnnData = "";
+    t.stdout.on('data', data => {
+        cnnData += data;
+    });
+
+    t.on('close', _ => {
+        fs.copyFileSync('/home/monster/git/darknet/predictions.png', '/home/monster/git/image-retrieval-yolo/uploads/custom_predictions.png');
+        //console.log(cnnData.split("seconds. "));
+        const labels = uniq(map(remove(cnnData.replace('\n', ' ').split("seconds. ")[1].split(/% ?/), undefined)))
+        return res.status(200).send(labels);
+    });
+}
+
+function getImages(labels: Array<string>, res: express.Response) {
+    mongo
+}
 
 const PORT: string | number = 8000;
 
@@ -25,8 +64,21 @@ class App {
         router.get('/', (_, res: express.Response) => {
             return res.sendFile(path.join( __dirname, 'index.html'));
         });
-        router.post('/upload', (_, res: express.Response) => {
-            return res.send("Thank")
+        router.post('/upload', upload.single('file'), (req: express.Request, res: express.Response) => {
+
+            var file = path.join(path.dirname(__dirname), 'uploads/', req.file.originalname);
+            let is = fs.createReadStream(path.join(__dirname, '../', req.file.path));
+            let ds = fs.createWriteStream(file);
+            is.pipe(ds);
+
+            is.on('end', () => {
+                fs.unlinkSync(path.join(__dirname, '../', req.file.path));
+            });
+
+            classifyImage(file, res);
+
+            //console.log(req.file);
+            //return res.send("Thank")
         });
         this.express.use('/', router);
     }
@@ -39,7 +91,7 @@ server.listen(PORT, (err: Error): void | never => {
     if (err) {
         throw err;
     }
-    /* tslint:disable */ 
+    /* tslint:disable */
     return console.log('Server listening on PORT: ' + PORT);
     /* tslint:enable */
 });

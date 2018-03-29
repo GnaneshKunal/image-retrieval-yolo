@@ -48,6 +48,11 @@ int main(void) {
     strcat(name, "dataset/");
     strcat(name, dirp->d_name);
 
+    char doneName[100];
+    strcpy(doneName, darknet);
+    strcat(doneName, "done_dataset/");
+    strcat(doneName, dirp->d_name);
+
     char cmd[1024];
     strcpy(cmd, "./darknet detect cfg/yolo.cfg yolo.weights ");
     strcat(cmd, name);
@@ -62,6 +67,7 @@ int main(void) {
     strcpy(data, "");
     int dataFlag = false;
     while (fgets(path, sizeof(path) - 1, fp) != NULL) {
+      rename(name, doneName);
       rename(predictions, newPredictions);
       strcat(data, path);
     }
@@ -131,7 +137,8 @@ void do_json(char *json, char *data, char *dir, char *dirp) {
   strcat(json, "\", \"dirp\":\"");
   strcat(json, dirp);
   strcat(json, "\", \"predicted\": [");
-
+  char *labels = malloc(1000 * sizeof(char));
+  strcpy(labels, "\"labels\": [");
   while ((fn = strchr(fn, '\n') + 1) != NULL && strlen(fn) != 0) {
     char *end2 = strchr(fn, ':');
     int k2 = end2 - fn;
@@ -141,6 +148,10 @@ void do_json(char *json, char *data, char *dir, char *dirp) {
     strcat(json, "{\"");
     strcat(json, buf2);
     strcat(json, "\": \"");
+
+    strcat(labels, "\"");
+    strcat(labels, buf2);
+    strcat(labels, "\",");
 
     char * start3 = strchr(fn, ':') + 2;
     char * end3 = strchr(fn, '\n');
@@ -154,8 +165,12 @@ void do_json(char *json, char *data, char *dir, char *dirp) {
     strcat(json, ",");
   }
 
+  labels[strlen(labels) - 1] = ']';
+  labels[strlen(labels)] = '\0';
   json[strlen(json) - 1] = ' ';
   strcat(json, "]");
+  strcat(json, ",");
+  strcat(json, labels);
   strcat(json, "}");
 }
 
