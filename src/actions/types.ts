@@ -1,0 +1,2 @@
+export const UPLOAD_PICTURE = 'UPLOAD_PICTURE';
+export const PICTURE_DATA = 'PICTURE_DATA';

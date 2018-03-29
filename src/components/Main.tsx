@@ -1,9 +1,14 @@
 import * as React from 'react';
 import Home from './Home';
+import { connect } from 'react-redux';
+
+import UploadForm from './UploadForm';
+import SimilarImages from './SimilarImages';
 
 const Main = (): JSX.Element => (
     <div>
-        <Home message='React-TypeScript Boilerplate project Made with \u2665' author='Gnanesh' />
+        <UploadForm />
+        <SimilarImages data={""} />
     </div>
 );
 
