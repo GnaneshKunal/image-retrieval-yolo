@@ -11,6 +11,7 @@
     "noUnusedParameters": true
   },
   "files": [
-    "index.ts"
+      "index.ts",
+      "models/yolo.ts"
   ]
 }
