@@ -5,11 +5,29 @@ import { connect } from 'react-redux';
 import UploadForm from './UploadForm';
 import SimilarImages from './SimilarImages';
 
-const Main = (): JSX.Element => (
-    <div>
-        <UploadForm />
-        <SimilarImages data={""} />
-    </div>
-);
+interface IMainProps {
+    picture: {
+        picData: string
+    }
+}
 
-export default Main;
+
+class Main extends React.Component<IMainProps, {}> {
+
+    constructor(props: any) {
+        super(props);
+    }
+
+    public render(): JSX.Element {
+        return (
+            <div>
+                <UploadForm />
+                <SimilarImages data={this.props.picture.picData || "Hello world"} />
+            </div>
+        );
+    }
+}
+
+const mapStateToProps = (state: any) => state;
+
+export default connect(mapStateToProps)(Main);

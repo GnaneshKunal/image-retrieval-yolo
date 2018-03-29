@@ -40,10 +40,10 @@ class UploadForm extends React.Component<IUploadPictureProps, IUploadFormState> 
             files,
             hasFile: true
         });
-        console.log(this.props);
-        if (this.state.files.length == 1) {
+        //console.log(this.props);
+        //if (this.state.files.length == 1) {
             this.props.uploadPicture(this.state.files);
-        }
+        //}
     }
 
 

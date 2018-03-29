@@ -6,6 +6,12 @@ interface ISimilarImagesProps {
 }
 
 class SimilarImages extends React.Component<ISimilarImagesProps, {}> {
+
+    constructor(props: any) {
+        super(props);
+    }
+
+
     public render(): JSX.Element {
         return (
             <div>
