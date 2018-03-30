@@ -16,7 +16,7 @@ const upload = multer({ dest: 'uploads/' })
 
 dotenv.config();
 
-const DATABASE_URL: string = 'mongodb://localhost:27017/yolo';
+const DATABASE_URL: string = 'mongodb://localhost:27017/cbir';
 
 (<any>mongoose).Promise = global.Promise;
 
@@ -36,15 +36,30 @@ function classifyImage(img: any, res: express.Response) {
     });
 
     t.on('close', _ => {
-        fs.copyFileSync('/home/monster/git/darknet/predictions.png', '/home/monster/git/image-retrieval-yolo/uploads/custom_predictions.png');
+        (<any>fs).copyFileSync('/home/monster/git/darknet/predictions.png', '/home/monster/git/image-retrieval-yolo/uploads/custom_predictions.png');
         //console.log(cnnData.split("seconds. "));
-        const labels = uniq(map(remove(cnnData.replace('\n', ' ').split("seconds. ")[1].split(/% ?/), undefined)))
-        return res.status(200).send(labels);
+        console.log(cnnData);
+        const labels = uniq(map(remove(cnnData.replace('\n', ' ').split("seconds. ")[1].split(/% ?/), undefined)));
+        const labels2 = map(labels, e => {
+            let ek = e.replace('\n', '');
+            return ek.substr(0, ek.indexOf(':')).trim();
+        });
+        getImages(remove(labels2, undefined), res);
+        //return res.status(200).send(labels);
     });
 }
 
 function getImages(labels: Array<string>, res: express.Response) {
-    mongo
+    YoloModelSchema.find({ labels: { $in: labels }})
+        .select('dirp -_id')
+        .limit(30)
+        .exec((err: Error, p_labels: Array<IYoloSchema>) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).send('Sorry, error');
+            }
+            return res.status(200).json(JSON.stringify(p_labels));
+        });
 }
 
 const PORT: string | number = 8000;

@@ -91,7 +91,7 @@ int main(void) {
     mongoc_init();
 
     client = mongoc_client_new("mongodb://localhost:27017/?appname=cbir-yolo");
-    collection = mongoc_client_get_collection(client, "cbir", "yolo");
+    collection = mongoc_client_get_collection(client, "cbir", "yolos");
 
     bson_t *bson;
     char *string;
@@ -172,5 +172,6 @@ void do_json(char *json, char *data, char *dir, char *dirp) {
   strcat(json, ",");
   strcat(json, labels);
   strcat(json, "}");
+  free(labels);
 }
 

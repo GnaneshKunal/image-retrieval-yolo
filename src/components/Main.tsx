@@ -22,7 +22,7 @@ class Main extends React.Component<IMainProps, {}> {
         return (
             <div>
                 <UploadForm />
-                <SimilarImages data={this.props.picture.picData || "Hello world"} />
+                <SimilarImages />
             </div>
         );
     }
