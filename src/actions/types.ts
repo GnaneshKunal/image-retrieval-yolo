@@ -1,2 +1,6 @@
 export const UPLOAD_PICTURE = 'UPLOAD_PICTURE';
 export const PICTURE_DATA = 'PICTURE_DATA';
+
+
+export const UPLOAD_PICTURE2 = 'UPLOAD_PICTURE2';
+export const PICTURE_DATA2 = 'PICTURE_DATA2';

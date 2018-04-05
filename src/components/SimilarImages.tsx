@@ -5,6 +5,7 @@ import * as path from 'path';
 interface ISimilarImagesProps {
     picture: {
         picData: string;
+        picData2: string;
     }
 }
 
@@ -36,6 +37,20 @@ class SimilarImages extends React.Component<ISimilarImagesProps, ISimilarImagesS
                     </div>
                 );
             });
+        } else if (this.props.picture !== undefined && this.props.picture.picData2 !== undefined) {
+            console.log(this.props);
+            let data = JSON.parse(this.props.picture.picData2);
+            console.log(data);
+            console.log(data[0][0]);
+            let imgLink = data[0][0].dirp;
+            console.log(imgLink)
+            return (
+                <div className="col-lg-3 col-md-4 col-xs-6">
+                    <a href="#" className="d-block mb-4 h-100">
+                        <img className="img-fluid img-thumbnail" src={path.join('./dest/', path.basename(imgLink))} key={imgLink} alt="" />
+                    </a>
+                </div>
+            );
         } else {
             return (
                 <div>
