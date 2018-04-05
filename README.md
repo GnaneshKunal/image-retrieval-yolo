@@ -1,38 +1,37 @@
-# TypeScript React Boilerplate
+# Image Retrieval using YOLO
 
-## Features
+## DATASET
+The dataset can be obtained from [here](http://cocodataset.org/)
 
-### - [React](https://facebook.github.io/react/)   :blue_heart:
-### - [Webpack 3](https://webpack.js.org/)   :snowflake:
-### - [TypeScript](https://www.typescriptlang.org/)   :syringe:
-### - [React Router v4](https://reacttraining.com/react-router/)  :fire:
-### - [TSLint](https://palantir.github.io/tslint/)  :musical_note:
+## Note
+Compile and run `yolo.d/train.c`. You must have installed Mongo C Driver.
 
-### API End points
+### Install Mongo C Driver
+Download [here](http://mongoc.org/) and cd the dir
 
-Add your own API end points in server
-
-### Usage
-#### Install dependencies and DevDependencies
-```
-$ yarn install
+```bash
+./configure
+make
+sudo make install
 ```
 
-#### Bundling
-```
-$ tsc -w // complies and -w (watches)
-$ webpack -w // bundles and -w (watches)
-```
-#### Using the Server
+Make sure your mongo daemon is running in the background
+`mongod --dbpath ~/data/db` (data/db exists already)
 
-```
-$ yarn start
-```
+## Useful Links
+* [YOLO: Real-Time Object Detection](https://pjreddie.com/darknet/yolo/)
+* [COCO Dataset](http://cocodataset.org/#home)
+*
 
-## Contributing
+## Results
 
-Contributions to this project are always welcome and highly encouraged.
+<div align="center">
+  <img src="https://www.dropbox.com/s/gvgt02besx9ix9i/img_yolo2.jpg?raw=1"><br /><br />
+  <img src="https://www.dropbox.com/s/0w8vjp3de6zrwp7/img_yolo1.png?raw=1"><br /><br />
+</div>
+
 
 ## License
 
 MIT License (MIT)
+
